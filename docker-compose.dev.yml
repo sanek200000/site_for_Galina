@@ -1,0 +1,43 @@
+services:
+  galina-app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: galina-app-dev
+    env_file:
+      - path: ./dev.env
+        required: true
+    depends_on:
+      - postgres
+      #- redis
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./src:/src
+      #- ./requirements.txt:/src/requirements.txt
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    env_file:
+      - path: ./dev.env
+        required: true
+    volumes:
+      - pg_data_booking:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  #redis:
+  #  image: redis:alpine
+  #  container_name: redis
+  #  env_file:
+  #    - path: ./dev.env
+  #      required: true
+  #  ports:
+  #    - "6379:6379"
+  #  restart: unless-stopped
+
+volumes:
+  pg_data_booking:
+    driver: local
