@@ -12,5 +12,5 @@ class ServicesORM(BaseORM):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(length=50), unique=True)
     description: Mapped[str | None]
-    duration: Mapped[timedelta] = mapped_column(Interval, nullable=False)
+    duration: Mapped[int]
     price: Mapped[int]

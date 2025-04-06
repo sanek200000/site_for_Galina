@@ -11,7 +11,7 @@ class RecordsORM(BaseORM):
 
     __tablename__ = "records"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[BaseORM.intpk]
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     service_id: Mapped[int] = mapped_column(ForeignKey("services.id"))
     workday_id: Mapped[int] = mapped_column(ForeignKey("workdays.id"))
