@@ -8,6 +8,9 @@ from alembic import context
 from conf import SETTINGS
 from database import BaseORM
 from models.users import UsersORM
+from models.services import ServicesORM
+from models.schedules import MonthesORM
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
