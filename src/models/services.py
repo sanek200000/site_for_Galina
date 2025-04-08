@@ -1,6 +1,5 @@
-from datetime import timedelta
-from sqlalchemy import Interval, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import BaseORM
 
 
@@ -9,8 +8,10 @@ class ServicesORM(BaseORM):
 
     __tablename__ = "services"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[BaseORM.intpk]
     name: Mapped[str] = mapped_column(String(length=50), unique=True)
     description: Mapped[str | None]
     duration: Mapped[int]
     price: Mapped[int]
+
+    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="service_rs")

@@ -1,6 +1,6 @@
 import enum
 from datetime import date
-from sqlalchemy import DateTime, Enum, ForeignKey, func
+from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import BaseORM
 
@@ -23,13 +23,13 @@ class NotificationsORM(BaseORM):
 
     __tablename__ = "notifications"
 
-    id: Mapped[BaseORM.intpk] = mapped_column(primary_key=True)
+    id: Mapped[BaseORM.intpk]
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     content: Mapped[str]
-    status: Mapped[StatusEnum]
     type: Mapped[TypeEnum]
+    status: Mapped[StatusEnum]
     scheduled_at: Mapped[date] = mapped_column(DateTime)
     sent_at: Mapped[date] = mapped_column(DateTime)
-    created_at: Mapped[date] = mapped_column(DateTime, server_default=func.now())
+    created_at: Mapped[BaseORM.created_at]
 
-    user = relationship("UsersORM", back_populates="notifications")
+    user_rs: Mapped["UsersORM"] = relationship(back_populates="notifications_rs")

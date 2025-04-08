@@ -1,46 +1,28 @@
-from datetime import datetime
-from sqlalchemy import DateTime, ForeignKey, String, func
+import enum
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import BaseORM
 
 
-class RolesORM(BaseORM):
-    __tablename__ = "roles"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(20), unique=True)
-
-    users: Mapped[list["UsersORM"]] = relationship(
-        back_populates="roles",
-        secondary="users_roles",
-    )
+class RolesEnum(enum.Enum):
+    admin = "admin"
+    barber = "barber"
+    client = "client"
 
 
 class UsersORM(BaseORM):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
+    id: Mapped[BaseORM.intpk]
     phone: Mapped[str] = mapped_column(String(length=12), unique=True)
     telagram: Mapped[str] = mapped_column(String(length=50), unique=True)
-    email: Mapped[str | None] = mapped_column(String(length=50), nullable=True)
+    role: Mapped[RolesEnum]
     name: Mapped[str] = mapped_column(String(length=100))
+    email: Mapped[str | None] = mapped_column(String(length=50))
     hashed_password: Mapped[str] = mapped_column(String(length=64))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        nullable=False,
-        server_default=func.now(),
+    created_at: Mapped[BaseORM.created_at]
+
+    notifications_rs: Mapped[list["NotificationsORM"]] = relationship(
+        back_populates="user_rs"
     )
-
-    roles: Mapped[list["RolesORM"]] = relationship(
-        back_populates="users",
-        secondary="users_roles",
-    )
-
-
-class UsersRoomsORM(BaseORM):
-    __tablename__ = "users_roles"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"))
+    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="user_rs")

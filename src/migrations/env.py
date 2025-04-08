@@ -7,10 +7,11 @@ from alembic import context
 
 from conf import SETTINGS
 from database import BaseORM
-from models.users import UsersORM
-from models.services import ServicesORM
-from models.schedules import MonthesORM
-from models.notifications import NotificationsORM
+from models.users import UsersORM  # noqa
+from models.services import ServicesORM  # noqa
+from models.notifications import NotificationsORM  # noqa
+from models.schedules import MonthsORM  # noqa
+from models.records import RecordsORM  # noqa
 
 
 # this is the Alembic Config object, which provides

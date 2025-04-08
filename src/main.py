@@ -4,21 +4,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload, selectinload
 
 
-from database import (
-    ENGINE,
-    ASYNC_SESSION_FACTORY,
-    BaseORM,
-    ResumesORM,
-    VacanciesORM,
-    WorkersORM,
-)
+from database import ENGINE, ASYNC_SESSION_FACTORY, BaseORM
 from models.services import ServicesORM
+from models.users import UsersORM
 
 
-async def create_tables():
+"""async def create_tables():
     async with ENGINE.begin() as conn:
         await conn.run_sync(BaseORM.metadata.drop_all)
-        await conn.run_sync(BaseORM.metadata.create_all)
+        # await conn.run_sync(BaseORM.metadata.create_all)
 
 
 async def insert_services():
@@ -111,9 +105,49 @@ async def select_resumes_with_all_relationships():
         result = res.unique().scalars().all()
         print(f"{result = }")
 
+"""
+
+
+async def insert_users():
+    async with ASYNC_SESSION_FACTORY() as session:
+        admin = UsersORM(
+            phone="+79522318888",
+            telagram="@sdfsdf",
+            role="admin",
+            name="Sasha",
+            email="dsfsda@dsfsdf",
+            hashed_password="111",
+        )
+        barber = UsersORM(
+            phone="+79522317777",
+            telagram="@aaa",
+            role="barber",
+            name="Galina",
+            email="sdfdffff@dsfsdf",
+            hashed_password="222",
+        )
+        client = UsersORM(
+            phone="+79522315555",
+            telagram="@asdd",
+            role="client",
+            name="Vasya",
+            email="ddd@dsfsdf",
+            hashed_password="333",
+        )
+        session.add_all([admin, barber, client])
+        await session.commit()
+
+
+async def select_users():
+    async with ASYNC_SESSION_FACTORY() as session:
+        query = select(UsersORM).filter_by(id=1)
+        res = await session.execute(query)
+        result = res.scalars().all()
+        print(f"==================== {result}")
+
 
 async def main():
-    await select_resumes_with_all_relationships()
+    await select_users()
 
 
 if __name__ == "__main__":

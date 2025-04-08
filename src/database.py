@@ -28,10 +28,10 @@ class BaseORM(DeclarativeBase):
 
     def __repr__(self):
         cols = [f"{col}={getattr(self, col)}" for col in self.__table__.columns.keys()]
-        return f"{self.__class__.__name__}: {'|'.join(cols)}"
+        return f"<{self.__class__.__name__}: {', '.join(cols)}>"
 
 
-class WorkersORM(BaseORM):
+"""class WorkersORM(BaseORM):
     __tablename__ = "workers"
     id: Mapped[BaseORM.intpk]
     name: Mapped[str]
@@ -71,4 +71,4 @@ class VacanciesResumesORM(BaseORM):
     resume_id: Mapped[int] = mapped_column(ForeignKey("resumes.id", ondelete="CASCADE"))
     vacancy_id: Mapped[int] = mapped_column(
         ForeignKey("vacancies.id", ondelete="CASCADE")
-    )
+    )"""
