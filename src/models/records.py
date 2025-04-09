@@ -24,6 +24,6 @@ class RecordsORM(BaseORM):
     def end_time(cls):
         return cls.start_time + timedelta(minutes=cls.service_rs.duration)
 
-    user_rs: Mapped["UsersORM"] = relationship(back_populates="records_rs")
-    service_rs: Mapped["ServicesORM"] = relationship(back_populates="records_rs")
-    workday_rs: Mapped["WorkdaysORM"] = relationship(back_populates="records_rs")
+    user_rs: Mapped["UsersORM"] = relationship(back_populates="records_rs")  # type: ignore
+    service_rs: Mapped["ServicesORM"] = relationship(back_populates="records_rs")  # type: ignore
+    workday_rs: Mapped["WorkdaysORM"] = relationship(back_populates="records_rs")  # type: ignore

@@ -35,4 +35,4 @@ class WorkdaysORM(BaseORM):
     end_time: Mapped[datetime] = mapped_column(Time, nullable=False)
 
     month_rs: Mapped["MonthsORM"] = relationship(back_populates="workdays_rs")
-    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="workday_rs")
+    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="workday_rs")  # type: ignore

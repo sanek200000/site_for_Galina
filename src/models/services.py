@@ -14,4 +14,4 @@ class ServicesORM(BaseORM):
     duration: Mapped[int]
     price: Mapped[int]
 
-    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="service_rs")
+    # records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="service_rs")  # type: ignore

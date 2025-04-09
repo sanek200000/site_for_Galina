@@ -32,4 +32,4 @@ class NotificationsORM(BaseORM):
     sent_at: Mapped[date] = mapped_column(DateTime)
     created_at: Mapped[BaseORM.created_at]
 
-    user_rs: Mapped["UsersORM"] = relationship(back_populates="notifications_rs")
+    user_rs: Mapped["UsersORM"] = relationship(back_populates="notifications_rs")  # type: ignore
