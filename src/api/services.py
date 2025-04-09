@@ -1,9 +1,7 @@
 from fastapi import APIRouter, Body, Query
-from sqlalchemy import func, insert, select
 
 from api.dependencies import PaginationDep
-from database import ASYNC_SESSION_FACTORY, ENGINE
-from models.services import ServicesORM
+from database import ASYNC_SESSION_FACTORY
 from repositries.services import ServicesRepository
 from schemas.services import ServiceAdd, ServicePatch
 from utils.openapi_examples import ServicesOE
@@ -33,6 +31,13 @@ async def get_all(
         )
 
 
+@router.get("/{service_id}", description="Получить услугу по id.")
+async def get_one_or_none(service_id: int):
+    async with ASYNC_SESSION_FACTORY() as session:
+        result = await ServicesRepository(session).get_one_or_none(id=service_id)
+    return {"status": "OK", "data": result}
+
+
 ## POST
 @router.post("", description="Добавить услугу.")
 async def create(data: ServiceAdd = Body(openapi_examples=ServicesOE.post)):
@@ -46,17 +51,27 @@ async def create(data: ServiceAdd = Body(openapi_examples=ServicesOE.post)):
 ## PUT
 @router.put("/{service_id}", description="Редактировать услугу.")
 async def put(service_id: int, data: ServiceAdd):
-    data = {"id": service_id} | data.model_dump()
-    return data
+    async with ASYNC_SESSION_FACTORY() as session:
+        result = await ServicesRepository(session).edit(data, id=service_id)
+        await session.commit()
+    return {"status": "OK", "data": result}
 
 
 ## PATCH
 @router.patch("/{service_id}", description="Редактировать услугу (выборочно).")
 async def patch(service_id: int, data: ServicePatch):
-    data = {"id": service_id} | data.model_dump()
-    return data
+    async with ASYNC_SESSION_FACTORY() as session:
+        result = await ServicesRepository(session).edit(
+            data, is_exclude=True, id=service_id
+        )
+        await session.commit()
+    return {"status": "OK", "data": result}
 
 
 ## DELETE
 @router.delete("/{service_id}", description="Удалить услугу.")
-async def delete(service_id: int): ...
+async def delete(service_id: int):
+    async with ASYNC_SESSION_FACTORY() as session:
+        await ServicesRepository(session).delete(id=service_id)
+        await session.commit()
+    return {"status": "OK"}

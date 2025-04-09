@@ -2,10 +2,14 @@ from sqlalchemy import func, select
 from database import ENGINE
 from models.services import ServicesORM
 from repositries.base import BaseRepository
+from repositries.mappers.mappers import ServicesDataMapper
+from schemas.services import ServiceRead
 
 
 class ServicesRepository(BaseRepository):
     model = ServicesORM
+    schema = ServiceRead
+    mapper = ServicesDataMapper
 
     async def get_all(
         self,
@@ -40,4 +44,4 @@ class ServicesRepository(BaseRepository):
         )
 
         result = await self.session.scalars(query)
-        return result.all()
+        return [self.mapper.map_to_domain_entity(row) for row in result.all()]

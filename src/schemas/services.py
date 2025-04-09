@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class ServiceAdd(BaseModel):
@@ -8,8 +8,10 @@ class ServiceAdd(BaseModel):
     price: int
 
 
-class Service(ServiceAdd):
+class ServiceRead(ServiceAdd):
     id: int
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ServicePatch(BaseModel):
@@ -17,7 +19,3 @@ class ServicePatch(BaseModel):
     description: str | None = None
     duration: int | None = None
     price: int | None = None
-
-
-class ServiceFiltred(ServicePatch):
-    id: int | None = None
