@@ -43,7 +43,7 @@ class BaseRepository:
 
         res = await self.session.execute(query)
         result = res.scalars().one()
-        return self.schema.model_validate(result)
+        return self.mapper.map_to_domain_entity(result)
 
     async def edit(self, data: BaseModel, is_exclude: bool = False, **filter_by):
         query = (
@@ -58,7 +58,7 @@ class BaseRepository:
 
         res = await self.session.execute(query)
         result = res.scalars().one()
-        return self.schema.model_validate(result)
+        return self.mapper.map_to_domain_entity(result)
 
     async def delete(self, **filter_by):
         query = delete(self.model).filter_by(**filter_by).returning(self.model)
