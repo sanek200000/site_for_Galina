@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Query
 
-from api.dependencies import PaginationDep
+from api.dependencies import DB_Dep, PaginationDep
 from database import ASYNC_SESSION_FACTORY
 from repositries.services import ServicesRepository
 from schemas.services import ServiceAdd, ServicePatch
@@ -14,6 +14,7 @@ router = APIRouter(prefix="/services", tags=["Услуги"])
 @router.get("", description="Показать все услуги.")
 async def get_all(
     pagination: PaginationDep,
+    db: DB_Dep,
     id: int | None = Query(None, description="id"),
     name: str | None = Query(None, description="Наименование услуги"),
     description: str | None = Query(None, description="Описание услуги"),
@@ -25,6 +26,9 @@ async def get_all(
     limit = pagination.per_page
     offset = pagination.per_page * (pagination.page - 1)
 
+    return await db.services_dbm.get_all(
+        id, name, description, duration, price, limit, offset
+    )
     async with ASYNC_SESSION_FACTORY() as session:
         return await ServicesRepository(session).get_all(
             id, name, description, duration, price, limit, offset
