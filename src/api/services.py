@@ -29,53 +29,41 @@ async def get_all(
     return await db.services_dbm.get_all(
         id, name, description, duration, price, limit, offset
     )
-    async with ASYNC_SESSION_FACTORY() as session:
-        return await ServicesRepository(session).get_all(
-            id, name, description, duration, price, limit, offset
-        )
 
 
 @router.get("/{service_id}", description="Получить услугу по id.")
-async def get_one_or_none(service_id: int):
-    async with ASYNC_SESSION_FACTORY() as session:
-        result = await ServicesRepository(session).get_one_or_none(id=service_id)
+async def get_one_or_none(db: DB_Dep, service_id: int):
+    result = await db.services_dbm.get_one_or_none(id=service_id)
     return {"status": "OK", "data": result}
 
 
 ## POST
 @router.post("", description="Добавить услугу.")
-async def create(data: ServiceAdd = Body(openapi_examples=ServicesOE.post)):
-    async with ASYNC_SESSION_FACTORY() as session:
-        result = await ServicesRepository(session).add(data)
-        await session.commit()
-
+async def create(db: DB_Dep, data: ServiceAdd = Body(openapi_examples=ServicesOE.post)):
+    result = await db.services_dbm.add(data)
+    await db.commit()
     return {"status": "OK", "data": result}
 
 
 ## PUT
 @router.put("/{service_id}", description="Редактировать услугу.")
-async def put(service_id: int, data: ServiceAdd):
-    async with ASYNC_SESSION_FACTORY() as session:
-        result = await ServicesRepository(session).edit(data, id=service_id)
-        await session.commit()
+async def put(db: DB_Dep, service_id: int, data: ServiceAdd):
+    result = await db.services_dbm.edit(data, id=service_id)
+    await db.commit()
     return {"status": "OK", "data": result}
 
 
 ## PATCH
 @router.patch("/{service_id}", description="Редактировать услугу (выборочно).")
-async def patch(service_id: int, data: ServicePatch):
-    async with ASYNC_SESSION_FACTORY() as session:
-        result = await ServicesRepository(session).edit(
-            data, is_exclude=True, id=service_id
-        )
-        await session.commit()
+async def patch(db: DB_Dep, service_id: int, data: ServicePatch):
+    result = await db.services_dbm.edit(data, is_exclude=True, id=service_id)
+    await db.commit()
     return {"status": "OK", "data": result}
 
 
 ## DELETE
 @router.delete("/{service_id}", description="Удалить услугу.")
-async def delete(service_id: int):
-    async with ASYNC_SESSION_FACTORY() as session:
-        await ServicesRepository(session).delete(id=service_id)
-        await session.commit()
+async def delete(db: DB_Dep, service_id: int):
+    await db.services_dbm.delete(id=service_id)
+    await db.commit()
     return {"status": "OK"}
