@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 class ServiceAdd(BaseModel):
     name: str
-    description: str | None
+    description: str | None = None
     duration: int
     price: int
 
@@ -11,7 +11,7 @@ class ServiceAdd(BaseModel):
 class ServiceRead(ServiceAdd):
     id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    # model_config = ConfigDict(from_attributes=True)
 
 
 class ServicePatch(BaseModel):

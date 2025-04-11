@@ -22,5 +22,5 @@ class UsersORM(BaseORM):
     hashed_password: Mapped[str] = mapped_column(String(length=64))
     created_at: Mapped[BaseORM.created_at]
 
-    notifications_rs: Mapped[list["NotificationsORM"]] = relationship(back_populates="user_rs")  # type: ignore
-    records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="user_rs")  # type: ignore
+    # notifications_rs: Mapped[list["NotificationsORM"]] = relationship(back_populates="user_rs")  # type: ignore
+    # records_rs: Mapped[list["RecordsORM"]] = relationship(back_populates="user_rs")  # type: ignore

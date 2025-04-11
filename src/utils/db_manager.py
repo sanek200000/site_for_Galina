@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from repositries.services import ServicesRepository
+from repositries.users import UsersRepository
 
 
 class DBManager:
@@ -10,6 +11,7 @@ class DBManager:
         self.__session = self.__session_factory()
 
         self.services_dbm = ServicesRepository(self.__session)
+        self.users_dbm = UsersRepository(self.__session)
 
         return self
 
