@@ -35,7 +35,13 @@ def get_user_id(token: str = Depends(get_token)):
     return data.get("id")
 
 
+def get_user_role(token: str = Depends(get_token)):
+    data = AuthService().decode_access_token(token)
+    return data.get("role")
+
+
 ## OUTPUT
 PaginationDep = Annotated[PaginationParams, Depends()]
 DB_Dep = Annotated[DBManager, Depends(get_db)]
 UserID_Dep = Annotated[int, Depends(get_user_id)]
+UserRole_Dep = Annotated[str, Depends(get_user_role)]

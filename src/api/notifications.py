@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 
-from api.dependencies import DB_Dep, PaginationDep
+from api.dependencies import DB_Dep, PaginationDep, UserRole_Dep
 from schemas.notifications import NotificationAdd, NotificationPatch
 from utils.openapi_examples import NotificationsOE
 
@@ -49,7 +49,9 @@ async def patch(db: DB_Dep, notification_id: int, data: NotificationPatch):
 
 ## DELETE
 @router.delete("/{notification_id}", description="Удалить уведомление.")
-async def delete(db: DB_Dep, notification_id: int):
-    await db.notifications_dbm.delete(id=notification_id)
-    await db.commit()
-    return {"status": "OK"}
+async def delete(user_role: UserRole_Dep, db: DB_Dep, notification_id: int):
+    if user_role in ["admin", "barber"]:
+        await db.notifications_dbm.delete(id=notification_id)
+        await db.commit()
+        return {"status": "OK"}
+    raise HTTPException(401, detail="Недостаточно прав")
