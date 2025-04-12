@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class ServicesOE:
     post = {
         "1": {
@@ -86,6 +89,44 @@ class AuthOE:
             "value": {
                 "phone": "+79524444444",
                 "password": "333",
+            },
+        },
+    }
+
+
+class NotificationsOE:
+    post = {
+        "1": {
+            "summary": "service1",
+            "value": {
+                "user_id": 15,
+                "content": "some content",
+                "type": "appointment_reminder_24h",
+                "status": "pending",
+                "scheduled_at": datetime.strptime("01.11.2025", "%d.%m.%Y"),
+                "sent_at": datetime.strptime("02.11.2025", "%d.%m.%Y"),
+            },
+        },
+        "2": {
+            "summary": "service2",
+            "value": {
+                "user_id": 16,
+                "content": "some content",
+                "type": "appointment_reminder_1h",
+                "status": "pending",
+                "scheduled_at": datetime.strptime("01.11.2025", "%d.%m.%Y"),
+                "sent_at": datetime.strptime("02.11.2025", "%d.%m.%Y"),
+            },
+        },
+        "3": {
+            "summary": "service3",
+            "value": {
+                "user_id": 17,
+                "content": "some content",
+                "type": "mass_notification",
+                "status": "pending",
+                "scheduled_at": datetime.strptime("01.11.2025", "%d.%m.%Y"),
+                "sent_at": datetime.strptime("02.11.2025", "%d.%m.%Y"),
             },
         },
     }

@@ -2,8 +2,10 @@ from typing import Any
 from pydantic import BaseModel
 from sqlalchemy.orm import DeclarativeBase
 
+from models.notifications import NotificationsORM
 from models.services import ServicesORM
 from models.users import UsersORM
+from schemas.notifications import NotificationRead
 from schemas.services import ServiceRead
 from schemas.users import UserRead
 
@@ -57,3 +59,8 @@ class ServicesDataMapper(BaseDataMapper):
 class UsersDataMapper(BaseDataMapper):
     db_model = UsersORM
     schema = UserRead
+
+
+class NotificationsDataMapper(BaseDataMapper):
+    db_model = NotificationsORM
+    schema = NotificationRead

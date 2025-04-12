@@ -12,7 +12,7 @@ from services.auth import AuthService
 class PaginationParams(BaseModel):
     page: Annotated[int | None, Query(1, ge=1, description="Страница")]
     per_page: Annotated[
-        int | None, Query(3, ge=1, lt=30, description="Элементов на странице")
+        int | None, Query(10, ge=1, lt=30, description="Элементов на странице")
     ]
 
 

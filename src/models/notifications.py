@@ -1,5 +1,5 @@
 import enum
-from datetime import date
+from datetime import datetime
 from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import BaseORM
@@ -28,8 +28,8 @@ class NotificationsORM(BaseORM):
     content: Mapped[str]
     type: Mapped[TypeEnum]
     status: Mapped[StatusEnum]
-    scheduled_at: Mapped[date] = mapped_column(DateTime)
-    sent_at: Mapped[date] = mapped_column(DateTime)
+    scheduled_at: Mapped[datetime] = mapped_column(DateTime)
+    sent_at: Mapped[datetime] = mapped_column(DateTime)
     created_at: Mapped[BaseORM.created_at]
 
-    user_rs: Mapped["UsersORM"] = relationship(back_populates="notifications_rs")  # type: ignore
+    # user_rs: Mapped["UsersORM"] = relationship(back_populates="notifications_rs")  # type: ignore

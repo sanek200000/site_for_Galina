@@ -16,8 +16,8 @@ class BaseRepository:
         self.session = session
 
     ## GET
-    async def get_all(self, *filter_by):
-        query = select(self.model).order_by(self.model.id)
+    async def get_all(self, limit: int, offset: int):
+        query = select(self.model).limit(limit).offset(offset).order_by(self.model.id)
         print(
             f"=====> {query.compile(bind=ENGINE, compile_kwargs={'literal_binds': True})}"
         )

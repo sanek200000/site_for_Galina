@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
+from repositries.notifications import NotificationsRepository
 from repositries.services import ServicesRepository
 from repositries.users import UsersRepository
 
@@ -12,6 +13,7 @@ class DBManager:
 
         self.services_dbm = ServicesRepository(self.__session)
         self.users_dbm = UsersRepository(self.__session)
+        self.notifications_dbm = NotificationsRepository(self.__session)
 
         return self
 
