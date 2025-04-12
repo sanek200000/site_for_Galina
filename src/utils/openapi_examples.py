@@ -66,3 +66,26 @@ class AuthOE:
             },
         },
     }
+    login = {
+        "1": {
+            "summary": "admin",
+            "value": {
+                "phone": "+79521111111",
+                "password": "111",
+            },
+        },
+        "2": {
+            "summary": "barber",
+            "value": {
+                "phone": "+79523333333",
+                "password": "222",
+            },
+        },
+        "3": {
+            "summary": "client",
+            "value": {
+                "phone": "+79524444444",
+                "password": "333",
+            },
+        },
+    }

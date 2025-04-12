@@ -4,17 +4,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
 from database import ENGINE
-from repositries.mappers.base import DataMapper
+from repositries.mappers.mappers import BaseDataMapper
 
 
 class BaseRepository:
+    mapper: BaseDataMapper = None
     model: DeclarativeBase = None
     schema: BaseModel = None
-    mapper: DataMapper = None
 
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    ## GET
     async def get_all(self, *filter_by):
         query = select(self.model).order_by(self.model.id)
         print(
@@ -24,7 +25,7 @@ class BaseRepository:
         result = await self.session.scalars(query)
         return [self.mapper.map_to_domain_entity(row) for row in result.all()]
 
-    async def get_one_or_none(self, **filter_by):
+    async def get_one_or_none(self, **filter_by) -> BaseModel | None:
         query = select(self.model).filter_by(**filter_by)
         print(
             f"=====> {query.compile(bind=ENGINE, compile_kwargs={'literal_binds': True})}"
@@ -35,6 +36,7 @@ class BaseRepository:
         if result:
             return self.mapper.map_to_domain_entity(result)
 
+    ## POST
     async def add(self, data: BaseModel):
         query = insert(self.model).values(**data.model_dump()).returning(self.model)
         print(
@@ -45,6 +47,7 @@ class BaseRepository:
         result = res.scalars().one()
         return self.mapper.map_to_domain_entity(result)
 
+    ## PUT/PATCH
     async def edit(self, data: BaseModel, is_exclude: bool = False, **filter_by):
         query = (
             update(self.model)
@@ -60,6 +63,7 @@ class BaseRepository:
         result = res.scalars().one()
         return self.mapper.map_to_domain_entity(result)
 
+    ## DELETE
     async def delete(self, **filter_by):
         query = delete(self.model).filter_by(**filter_by).returning(self.model)
         print(

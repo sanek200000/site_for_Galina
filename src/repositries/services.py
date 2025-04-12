@@ -3,36 +3,33 @@ from database import ENGINE
 from models.services import ServicesORM
 from repositries.base import BaseRepository
 from repositries.mappers.mappers import ServicesDataMapper
-from schemas.services import ServiceRead
 
 
 class ServicesRepository(BaseRepository):
-    model = ServicesORM
-    schema = ServiceRead
     mapper = ServicesDataMapper
+    model = mapper.db_model
+    schema = mapper.schema
 
     async def get_all(
         self,
-        id,
-        name,
-        description,
-        duration,
-        price,
-        limit,
-        offset,
+        id: int,
+        name: str,
+        description: str,
+        duration: int,
+        price: int,
+        limit: int,
+        offset: int,
     ):
         query = select(self.model).limit(limit).offset(offset).order_by(self.model.id)
         if id:
             query = query.filter_by(id=id)
         if name:
             query = query.filter(
-                func.lower(ServicesORM.name).contains(name.lower().strip())
+                func.lower(self.model.name).contains(name.lower().strip())
             )
         if description:
             query = query.filter(
-                func.lower(ServicesORM.description).contains(
-                    description.lower().strip()
-                )
+                func.lower(self.model.description).contains(description.lower().strip())
             )
         if duration:
             query = query.filter_by(duration=duration)

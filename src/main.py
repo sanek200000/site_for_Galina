@@ -5,8 +5,8 @@ from api.auth import router as router_auth
 
 
 app = FastAPI()
-app.include_router(router_services)
 app.include_router(router_auth)
+app.include_router(router_services)
 
 if __name__ == "__main__":
     import uvicorn

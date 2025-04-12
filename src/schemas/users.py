@@ -1,10 +1,12 @@
 from pydantic import BaseModel, EmailStr
 
+from models.users import RolesEnum
+
 
 class UserRequestAdd(BaseModel):
     phone: str
     telagram: str
-    role: str
+    role: RolesEnum
     name: str
     email: EmailStr | None = None
     password: str
@@ -13,7 +15,7 @@ class UserRequestAdd(BaseModel):
 class UserAdd(BaseModel):
     phone: str
     telagram: str
-    role: str
+    role: RolesEnum
     name: str
     email: EmailStr | None = None
     hashed_password: str
@@ -26,6 +28,11 @@ class UserRead(BaseModel):
     role: str
     name: str
     email: EmailStr | None = None
+
+
+class UserLogin(BaseModel):
+    phone: str
+    password: str
 
 
 class UserPatch(BaseModel):
